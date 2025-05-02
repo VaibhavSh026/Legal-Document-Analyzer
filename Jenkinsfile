@@ -1,18 +1,24 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    stage('Clone Repository') {
-      steps {
-        git 'https://github.com/your-username/legal-doc-analyzer.git'
-      }
-    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/VaibhavSh026/Legal-Document-Analyzer.git'
+            }
+        }
 
-    stage('Build Docker Image') {
-      steps {
-        sh 'docker-compose down --volumes'
-        sh 'docker-compose up --build -d'
-      }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t legal-doc-analyzer-app .'
+            }
+        }
+
+        stage('Run Docker Compose') {
+            steps {
+                sh 'docker-compose down || true'
+                sh 'docker-compose up -d --build'
+            }
+        }
     }
-  }
 }
