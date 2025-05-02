@@ -1,16 +1,15 @@
 pipeline {
-    agent any
+    agent {
+        label '' // Leave it empty to use master node (inside Jenkins container)
+    }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/VaibhavSh026/Legal-Document-Analyzer.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t legal-doc-analyzer-app .'
+                script {
+                    sh 'docker version' // Confirm docker is available
+                    sh 'docker build -t legal-doc-analyzer-app .'
+                }
             }
         }
 
