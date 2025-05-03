@@ -1,22 +1,20 @@
 pipeline {
-    agent {
-        label '' // Leave it empty to use master node (inside Jenkins container)
-    }
+    agent any  // Use the appropriate agent, it could be a Windows node
 
     stages {
-        stage('Build Docker Image') {
+        stage('Git Checkout and Pull') {  // Stage to ensure the latest code is pulled from the repository
             steps {
-                script {
-                    sh 'docker version' // Confirm docker is available
-                    sh 'docker build -t legal-doc-analyzer-app .'
-                }
-            }
+                // Checkout the correct branch or create it if it doesn't exist, then pull the latest changes
+                bat 'git checkout feature1 || git checkout -b feature1 origin/feature1'
+                bat 'git pull origin feature1'
+            } 
         }
 
-        stage('Run Docker Compose') {
+        stage('Docker Build and Run') {  // Stage to build and start the Docker container
             steps {
-                sh 'docker-compose down || true'
-                sh 'docker-compose up -d --build'
+                // Build the Docker image and run the container
+                bat 'docker build -t portfolio-app .'
+                bat 'docker run -d -p 3000:3000 --name portfolio-container portfolio-app'
             }
         }
     }
