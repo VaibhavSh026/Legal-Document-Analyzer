@@ -5,8 +5,8 @@ pipeline {
         stage('Git Checkout and Pull') {  // Stage to ensure the latest code is pulled from the repository
             steps {
                 // Checkout the correct branch or create it if it doesn't exist, then pull the latest changes
-                sh 'git checkout feature1 || git checkout -b feature1 origin/feature1'
-                sh 'git pull origin feature1'
+                sh 'git checkout master || git checkout -b master origin/master'
+                sh 'git pull origin master'
             } 
         }
 
